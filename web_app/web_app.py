@@ -13,6 +13,7 @@ def home():
 
 @app.route("/sites/")
 def sites():
+    """ Show view of the different sites. Currently not used. """
     return render_template("sites.html")
 
 @app.route("/sensors/")
@@ -22,6 +23,7 @@ def sensors():
 
 @app.route('/sensors/<string:sensor_id>', methods=['GET'])
 def sensor_data(sensor_id):
+    """ Fetch the sensor data from the database. Called when a sensor is clicked in the table. """
     sensor_data_list = get_sensor_data(str(sensor_id), int(SENSOR_DATA_INTERVAL_H)) 
     timestamps = [measurement[0] for measurement in sensor_data_list]
     temp_measurements = [measurement[2] for measurement in sensor_data_list]
