@@ -4,8 +4,8 @@ SensView is an end-to-end sensor monitoring application. This includes everythin
 
 ![sensview](imgs/sensview.png)
 
-[!NOTE]  
-This repo is a copy of a private repo, therefore the commit history is not extensive.
+>[!NOTE]  
+>This repo is a copy of a private repo, therefore the commit history is not extensive.
 
 ## BLE Sensor Network
 The sensor network is made up of one access point (AP) and 6 tags with temperature and relative-humidity (TRH) sensors. Using [Periodic Advertising with Responses](https://novelbits.io/periodic-advertising-with-responses-pawr/) (PAwR), these devices make up a star-network. The role of the network was to collect environmental data periodically. Although the network shown here only consists of 6 nodes, the technology is scalable to 100+ tags.
