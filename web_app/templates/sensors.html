@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+<body>
+    {% block sidebar_options %}
+    <li>
+        <a href="/sites/" class="nav-link link-light">
+            <i class="bi bi-pin-map-fill me-2"></i> Sites
+        </a>
+    </li>
+    <li>
+        <a href="/sensors/" class="nav-link active" aria-current="page">
+            <i class="bi bi-thermometer-half me-2"></i> Sensors
+        </a>
+    </li>
+    {% endblock %}
+
+    {%block main_content %}
+    <div class="container-fluid">
+        <div class="table-responsive rounded" style="max-height: 30vh;">
+            <table class="table table-bordered table-hover;" style="border-color: #494949;">
+                <thead class="sticky-top">
+                    <tr class="table-header">
+                        <th class="th" scope="col" >Sensor ID</th>
+                        <th scope="col">Site ID</th>
+                        <th scope="col">Model</th>
+                        <th scope="col">Location North</th>
+                        <th scope="col">Location East</th>
+                        <th scope="col">Bluetooth Address</th>
+                        <th scope="col">Battery Level</th>
+                        <th scope="col">Last Seen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sensor in sensor_list %}
+                    <tr class="table-row" sensor_id={{sensor[0]}} sensor_model="{{sensor[2]}}">
+                        {% for field in sensor %}
+                        <td>{{ field }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container">
+        <div>
+            <canvas id="sensorGraph"></canvas> <!-- The canvas where the graph will be rendered -->
+        </div>
+    </div>
+    </div>
+
+    <script>
+        // Function to load the data of the first sensor when the page has loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            const sensorId = "Please choose a sensor from the table!";
+            const sensorModel = ""
+            fetchSensorData(sensorId, sensorModel)
+        });
+
+        // Function to handle row click and fetch sensor data
+        document.querySelectorAll('tr[sensor_id]').forEach(function (row) {
+            row.addEventListener('click', function () {
+                var sensorId = this.getAttribute('sensor_id');
+                var sensorModel = this.getAttribute('sensor_model');
+                fetchSensorData(sensorId, sensorModel); // Fetch and render the graph
+            });
+        })
+        // Function to fetch data (replace this with your own AJAX call)
+        function fetchSensorData(sensorId, sensorModel) {
+            // Example: Fetch data from a Flask endpoint
+            fetch(`/sensors/${sensorId}`)
+                .then(response => response.json())
+                .then(data => {
+                    renderGraph(data, sensorId, sensorModel);
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Function to render the graph using Chart.js
+        function renderGraph(data, sensorId, sensorModel) {
+            const ctx = document.getElementById('sensorGraph').getContext('2d');
+        
+            const timeLabels = data.timestamps;  // Ensure this is in ISO 8601 format
+            const tempValues = data.temp_measurements;  // Ensure this is an array of numbers
+            const humValues = data.hum_measurements;  // Ensure this is an array of numbers
+        
+            // Clear the previous chart instance if any
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+        
+            window.myChart = new Chart(ctx, {
+                type: 'line',
+                borderColor: '#ffffff',
+                data: {
+                    labels: timeLabels,
+                    datasets: [
+                        {
+                            label: 'Temperature',
+                            data: tempValues,
+                            yAxisID: "y",
+                            fill: false,
+                            borderColor: '#2e86c1',
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Humidity',
+                            data: humValues,
+                            yAxisID: "y2",
+                            fill: false,
+                            borderColor: ' #884ea0 ',
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `${sensorModel} ${sensorId}`, // Dynamic chart title
+                            font: {
+                                size: 18, // Adjust the title font size if needed
+                                weight: 'bold' // Font weight of the title
+                            },
+                            padding: {
+                                top: 30,
+                                bottom: 10 // Adjust spacing around the title
+                            },
+                            color: "#9e9e9e"
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'hour',  // Adjust the time unit as needed
+                                tooltipFormat: 'MMM DD, YYYY HH:mm', // Format for tooltips (optional)
+                                displayFormats: {
+                                    minute: 'MMM DD, YYYY HH:mm', // Display format for the x-axis (optional)
+                                }
+                            },
+                            title: {
+                                display: true, // Set to true to display the title
+                                text: 'Time (Hour)', // Set the title text
+                                color: 'white'
+                            },
+                            grid: {
+                                color: '#555555'
+                            }
+                        },
+                        y: {
+                            suggestedMin: 15,
+                            type: 'linear',
+                            position: "left",
+                            title: {
+                                display: true, // Set to true to display the title
+                                text: 'Temperature (°C)', // Set the title text
+                                color: 'white'
+                            },
+                            grid: {
+                                color: '#555555'
+                            }
+                        },
+                        y2: {
+                            suggestedMin: 20,
+                            suggestedMax: 70,
+                            type: "linear",
+                            position: "right",
+                            title: {
+                                display: true, // Set to true to display the title
+                                text: 'Humidity (%)', // Set the title text
+                                color: 'white'
+                            },
+                            grid: {
+                                drawOnChartArea: false, // only want the grid lines for one axis to show up
+                              },
+                        }
+                    }
+                }
+            });
+        }  
+    </script>
+    {% endblock %}
+</body>
