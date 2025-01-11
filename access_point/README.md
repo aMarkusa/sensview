@@ -13,7 +13,7 @@ AS can be seen, the AP can be viewed as having two threads. One thread that scan
 ├── database
 │   ├── db.sql      <- SQL script used to create the database for sensor data
 └── host
-    ├── app
+    ├── app     <- Python application for the host
     │   ├── api
     │   ├── app.py      <- Main script that starts the application
     │   ├── common
