@@ -53,7 +53,7 @@ else
 endif
 
 # Values that should be appended by the sub-makefiles
-C_SOURCE_FILES   = pawr.c tag_advertiser.c battery_level.c
+C_SOURCE_FILES   = app_libraries/src/pawr.c app_libraries/src/tag_advertiser.c app_libraries/src/battery_level.c
 CXX_SOURCE_FILES = 
 ASM_SOURCE_FILES = 
 
@@ -62,7 +62,7 @@ LIBS =
 C_DEFS   = 
 ASM_DEFS = 
 
-INCLUDES = 
+INCLUDES = -I app_libraries/inc
 
 C_FLAGS           = 
 C_FLAGS_DEBUG     = 
