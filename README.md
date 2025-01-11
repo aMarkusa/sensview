@@ -1,6 +1,6 @@
 # SensView
 
-SensView is an end-to-end sensor monitoring application. This includes everything from a BLE sensor network to real-time data visualization. This solution was created in order to learn how data collected by embedded systems can be stored and visualized for users. The different components of SensView are described in their respective folders. 
+SensView is an end-to-end sensor monitoring application. This includes everything from a BLE sensor network to real-time data visualization. This solution was created in order to learn how data from embedded systems can be collected wirelessly, stored, and visualized for users. The different components of SensView are described in their respective folders. 
 
 ![sensview](imgs/sensview.png)
 
