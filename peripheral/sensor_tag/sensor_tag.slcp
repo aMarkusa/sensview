@@ -1,0 +1,65 @@
+# Silicon Labs Project Configuration Tools: slcp, v0, Component selection file.
+project_name: sensor_tag
+label: sensor_tag
+description: |
+  A minimal project structure, that serves as a starting point for custom Bluetooth applications. The application starts advertising after boot and restarts advertising after a connection is closed.
+category: Bluetooth Examples
+filter:
+- name: Device Type
+  value: [SoC]
+- name: Project Difficulty
+  value: [Beginner]
+- name: Wireless Technology
+  value: [Bluetooth]
+package: Bluetooth
+quality: production
+readme:
+- {path: readme.md}
+- {path: readme.md}
+source:
+- {path: main.c}
+- {path: app.c}
+tag: ['hardware:rf:band:2400']
+include:
+- path: .
+  file_list:
+  - {path: app.h}
+sdk: {id: simplicity_sdk, version: 2024.12.0}
+toolchain_settings: []
+component:
+- {id: app_assert}
+- {id: bluetooth_feature_connection}
+- {id: bluetooth_feature_gatt}
+- {id: bluetooth_feature_gatt_server}
+- {id: bluetooth_feature_legacy_advertiser}
+- {id: bluetooth_feature_past_receiver}
+- {id: bluetooth_feature_pawr_sync}
+- {id: bluetooth_feature_sm}
+- {id: bluetooth_feature_system}
+- {id: bluetooth_stack}
+- {id: brd4182a}
+- {id: bt_post_build}
+- {id: clock_manager}
+- {id: component_catalog}
+- {id: device_init}
+- {id: emlib_iadc}
+- {id: gatt_configuration}
+- {id: gatt_service_device_information}
+- instance: [sensor]
+  id: i2cspm
+- {id: mpu}
+- {id: rail_util_pti}
+- {id: sensor_rht}
+- {id: sl_system}
+configuration:
+- {name: SL_STACK_SIZE, value: '2752'}
+- {name: SL_HEAP_SIZE, value: '9200'}
+- {name: SL_BT_CONFIG_MAX_PERIODIC_ADVERTISING_SYNC, value: '1'}
+- condition: [psa_crypto]
+  name: SL_PSA_KEY_USER_SLOT_COUNT
+  value: '0'
+ui_hints:
+  highlight:
+  - {path: config/btconf/gatt_configuration.btconf}
+  - {path: readme.md, focus: true}
+
